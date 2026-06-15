@@ -341,7 +341,7 @@ body {
 .hero-badge {
     display: inline-block;
     background: rgba(255,255,255,.35);
-    color: var(--rose-dark);
+    color: #a52a52;
     font-size: .75rem;
     font-weight: 700;
     letter-spacing: .12em;
@@ -355,18 +355,18 @@ body {
 .hero h2 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2.4rem, 6vw, 3.8rem);
-    color: var(--rose-dark);
+    color: #a52a52;
     line-height: 1.12;
     margin-bottom: 1.1rem;
     letter-spacing: -.5px;
 }
 .hero h2 em {
     font-style: italic;
-    color: var(--rose);
+    color: #d63a6c;
 }
 .hero p {
     font-size: 1.08rem;
-    color: var(--text-mid);
+    color: #7a4a5e;
     line-height: 1.7;
     margin-bottom: 2.2rem;
     max-width: 520px;
@@ -378,6 +378,20 @@ body {
     gap: .85rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+.hero .btn-primary {
+    background: linear-gradient(135deg, #d63a6c, #e8608a);
+    box-shadow: 0 4px 14px rgba(214,58,108,0.18);
+}
+.hero .btn-primary:hover {
+    box-shadow: 0 8px 22px rgba(214,58,108,0.20);
+}
+.hero .btn-outline {
+    color: #d63a6c;
+    border: 1.5px solid #d63a6c;
+}
+.hero .btn-outline:hover {
+    background: #fdf0f6;
 }
 .hero-scroll {
     display: flex;
@@ -391,17 +405,17 @@ body {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--rose-dark);
+    color: #a52a52;
     line-height: 1;
 }
 .hero-scroll-item .lbl {
     font-size: .72rem;
-    color: var(--text-mid);
+    color: #7a4a5e;
     text-transform: uppercase;
     letter-spacing: .08em;
     margin-top: .2rem;
 }
-.hero-divider { width: 1px; height: 44px; background: var(--petal); opacity: .6; }
+.hero-divider { width: 1px; height: 44px; background: #f7c5d8; opacity: .6; }
 
 /* ── SECTION ── */
 .section {

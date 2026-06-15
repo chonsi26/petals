@@ -514,7 +514,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--blush-pale); color:
 
     $flowers   = $pdo->query("SELECT * FROM flowers ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
     $customers = $pdo->query("SELECT * FROM customers ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
-    $orders    = $pdo->query("SELECT o.*, c.name as cname, f.name as fname FROM orders o
+    $orders    = $pdo->query("SELECT o.*, c.name as cname, c.email as cemail, c.phone as cphone, c.address as caddress, f.name as fname FROM orders o
                     LEFT JOIN customers c ON o.customer_id=c.id
                     LEFT JOIN flowers f ON o.flower_id=f.id ORDER BY o.id DESC")->fetchAll(PDO::FETCH_ASSOC);
     $recentOrders = array_slice($orders, 0, 5);
@@ -916,7 +916,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--blush-pale); color:
           <td><span class="badge badge-<?= $o['status'] ?>"><?= ucfirst($o['status']) ?></span></td>
           <td style="color:var(--text-soft);font-size:.8rem;"><?= date('M j, Y', strtotime($o['order_date'])) ?></td>
           <td>
-            <button class="btn btn-outline btn-xs" onclick='editOrder(<?= json_encode($o) ?>)'>✏ Status</button>
+            <button class="btn btn-outline btn-xs" onclick="viewOrder(<?= htmlspecialchars(json_encode($o), ENT_QUOTES, 'UTF-8') ?>)">👁 View</button>
+            <button class="btn btn-outline btn-xs" onclick="editOrder(<?= htmlspecialchars(json_encode($o), ENT_QUOTES, 'UTF-8') ?>)">✏ Status</button>
             <a class="btn btn-danger btn-xs" href="?page=orders&delete_order=<?= $o['id'] ?>" onclick="return confirm('Delete this order?')">✕ Del</a>
           </td>
         </tr>
@@ -968,12 +969,38 @@ body { font-family: 'DM Sans', sans-serif; background: var(--blush-pale); color:
       </form>
     </div>
   </div>
+
+  <!-- VIEW ORDER MODAL -->
+  <div class="modal-overlay" id="viewOrderModal">
+    <div class="modal">
+      <button class="close-modal" onclick="closeModal('viewOrderModal')">×</button>
+      <h2>✿ Order Details</h2>
+      <div id="vo_content" style="font-size: .9rem; color: var(--text-dark); line-height: 1.6;"></div>
+      <div class="modal-footer"><button type="button" class="btn btn-outline" onclick="closeModal('viewOrderModal')">Close</button></div>
+    </div>
+  </div>
+
   <script>
   function editOrder(o) {
     document.getElementById('eo_id').value=o.id;
     document.getElementById('eo_num').textContent=o.id;
     document.getElementById('eo_status').value=o.status;
     openModal('editOrderModal');
+  }
+  function viewOrder(o) {
+    let html = '<div style="margin-bottom: 1.2rem;"><h4 style="font-size:.85rem; color:var(--text-mid); text-transform:uppercase; margin-bottom:.5rem;">Customer Info</h4>' +
+               '<p style="margin-bottom:.3rem;"><strong>Name:</strong> ' + (o.cname || '—') + '</p>' +
+               '<p style="margin-bottom:.3rem;"><strong>Email:</strong> ' + (o.cemail || '—') + '</p>' +
+               '<p style="margin-bottom:.3rem;"><strong>Phone:</strong> ' + (o.cphone || '—') + '</p>' +
+               '<p style="margin-bottom:.3rem;"><strong>Address:</strong> ' + (o.caddress || '—') + '</p></div>' +
+               '<div style="border-top: 1px solid var(--border); padding-top: 1.2rem;">' +
+               '<h4 style="font-size:.85rem; color:var(--text-mid); text-transform:uppercase; margin-bottom:.5rem;">Order Info</h4>' +
+               '<p style="margin-bottom:.3rem;"><strong>Flower:</strong> ' + (o.fname || '—') + '</p>' +
+               '<p style="margin-bottom:.3rem;"><strong>Quantity:</strong> ' + o.quantity + '</p>' +
+               '<p style="margin-bottom:.3rem;"><strong>Total Price:</strong> ₱' + parseFloat(o.total_price).toLocaleString('en-PH', {minimumFractionDigits:2}) + '</p>' +
+               '<p style="margin-bottom:.3rem;"><strong>Status:</strong> <span class="badge badge-' + o.status + '">' + o.status.charAt(0).toUpperCase() + o.status.slice(1) + '</span></p></div>';
+    document.getElementById('vo_content').innerHTML = html;
+    openModal('viewOrderModal');
   }
   </script>
 
